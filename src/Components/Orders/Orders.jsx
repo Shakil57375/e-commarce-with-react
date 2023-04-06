@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCreditCard } from "@fortawesome/free-solid-svg-icons";
 import './Orders.css'
 import Cart from '../Cart/Cart';
-import { useLoaderData } from 'react-router-dom';
+import { Link, useLoaderData } from 'react-router-dom';
 import ReviewItem from '../ReviewItem/ReviewItem';
-import { removeFromDb } from '../../utilities/fakedb';
+import { deleteShoppingCart, removeFromDb } from '../../utilities/fakedb';
 
 const Orders = () => {
     const savedCart = useLoaderData()
@@ -13,6 +15,12 @@ const Orders = () => {
         setCart(cart.filter(product => product.id !== id))
         removeFromDb(id);
     }
+
+    const handleClearCart = () =>{
+        setCart([]);
+        deleteShoppingCart();
+    }
+
     return (
         <div>
             <div className="shop-container">
@@ -20,14 +28,23 @@ const Orders = () => {
                     {
                         cart.map(product => 
                         <ReviewItem 
-                        key = {product.id} 
-                        handleRemoveItem = {handleRemoveItem}
-                        product = {product} >
+                            key = {product.id} 
+                            handleRemoveItem = {handleRemoveItem}
+                            product = {product} >
                         </ReviewItem>)
                     }
                 </div>
                 <div className="cart-container">
-                    <Cart cart={cart}></Cart>
+                    <Cart handleClearCart = {handleClearCart} cart={cart}>
+                        <Link className='proceed_link' to='/checkout'>
+                            <button className='btn-proceed'>
+                                Proced Checkout
+                                <FontAwesomeIcon icon={faCreditCard} />
+
+                            
+                            </button>
+                        </Link>
+                    </Cart>
                 </div>
             </div>
         </div>
