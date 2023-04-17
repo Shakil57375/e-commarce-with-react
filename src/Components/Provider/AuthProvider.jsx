@@ -4,11 +4,14 @@ import { app } from '../../Firebase/firebase';
 export const AuthContext = createContext(null)
 const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
+    const [loader, setLoader] = useState(true);
     const auth = getAuth(app)
     const createUser = (email, password) =>{
+        setLoader(true);
         return createUserWithEmailAndPassword(auth, email, password)
     } 
     const SignIn = (email, password) =>{
+        setLoader(true);
         return signInWithEmailAndPassword(auth, email, password)
     }
     const logOut = () =>{
@@ -21,6 +24,7 @@ const AuthProvider = ({children}) => {
         const unsubscribe = onAuthStateChanged(auth, currentUser=>{
             console.log("object", currentUser);
             setUser(currentUser)
+            setLoader(false)
         })
         // stop observing while unmounting
         return () =>{
@@ -30,6 +34,7 @@ const AuthProvider = ({children}) => {
 
     const authInfo = {
         user,
+        loader,
         SignIn,
         createUser,
         logOut

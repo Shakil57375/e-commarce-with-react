@@ -1,9 +1,14 @@
 import React, { useContext, useState } from 'react';
 import './Login.css';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../Provider/AuthProvider';
 const Login = () => {
-    const {SignIn} = useContext(AuthContext)
+    const [show, setShow] = useState(false)
+    const {SignIn} = useContext(AuthContext);
+    const navigate = useNavigate();
+    const location = useLocation()
+    console.log(location);
+    const from = location.state?.from?.pathname || "/";
     const [error, setError] = useState("")
     const [success, setSuccess]  = useState("")
     const handleSignIn = (event) =>{
@@ -20,6 +25,7 @@ const Login = () => {
             console.log(loggedUser);
             setSuccess("User successfully logged in")
             form.reset()
+            navigate(from, {replace : true})
         })
         .catch(error =>{
             console.log(error);
@@ -37,7 +43,14 @@ const Login = () => {
                         </div>
                         <div className="form-control">
                             <label htmlFor="password">Password</label>
-                            <input type="password" name='password' placeholder='Enter your password' required />
+                            <input type={show ? "text" : "password"} name='password' placeholder='Enter your password' required />
+                            <p onClick={() => setShow(!show)}>
+                                <small>
+                                    {
+                                        show ? <span>Hide Password</span> : <span>Show password</span>
+                                    }
+                                </small>
+                            </p>
                         </div>
                         <input type="submit" value="Login" className='btn-submit' />
                     </form>

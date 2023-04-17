@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../Provider/AuthProvider';
 const SignUp = () => {
     const [error, setError] = useState("")
+    const [show, setShow] = useState(false)
+    const [confirm, setConfirm] = useState(false)
     const {createUser} = useContext(AuthContext)
     const handleSignUp = (event) =>{
         event.preventDefault()
@@ -41,11 +43,25 @@ const SignUp = () => {
                         </div>
                         <div className="form-control">
                             <label htmlFor="password">Password</label>
-                            <input type="password" name='password' placeholder='Enter your password' required />
+                            <input type={show ? "text" : "password"} name='password' placeholder='Enter your password' required />
+                            <p onClick={() => setShow(!show)}>
+                                <small>
+                                    {
+                                        show ? <span>Hide Password</span> : <span>Show Password</span>
+                                    }
+                                </small>
+                            </p>
                         </div>
                         <div className="form-control">
                             <label htmlFor="password">Confirm Password</label>
-                            <input type="password" name='confirm' placeholder='Enter your password' required />
+                            <input type={confirm ? "text" : "password"} name='confirm' placeholder='Enter your password' required />
+                            <p onClick={() => setConfirm(!confirm)}>
+                                <small>
+                                    {
+                                        confirm ? <span>Hide Password</span> : <span>Show Password</span>
+                                    }
+                                </small>
+                            </p>
                         </div>
                         <input type="submit" value="Sign Up" className='btn-submit' />
                     </form>
